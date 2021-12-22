@@ -1,0 +1,25 @@
+{
+  "name": "nksku",
+  "version": "1.0.0",
+  "description": "This repo contains 3 parts",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hemisemidemipresent/NKsku.git"
+  },
+  "author": "hemidemisemipresent",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hemisemidemipresent/NKsku/issues"
+  },
+  "homepage": "https://github.com/hemisemidemipresent/NKsku#readme",
+  "dependencies": {
+    "aes-js": "^3.1.2",
+    "axios": "^0.24.0",
+    "request": "^2.88.2",
+    "text-encoding": "^0.7.0"
+  }
+}
