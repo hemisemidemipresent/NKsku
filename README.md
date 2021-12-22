@@ -139,7 +139,7 @@ Returns **[array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Gl
 just some standard stuff, did something a bit different using promisify in this example
 
 ```js
-const nksave = require('nksave');
+const { nksave } = require('nksku');
 const fs = require('fs');
 
 const { promisify } = require('util');
@@ -158,7 +158,7 @@ main();
 similar to above example
 
 ```js
-const nksave = require('nksave');
+const { nksave } = require('nksku');
 const fs = require('fs');
 
 const { promisify } = require('util');
@@ -201,7 +201,7 @@ Returns **[Buffer](https://nodejs.org/api/buffer.html)** buffer to write data to
 ## Usage
 
 ```js
-const signonce = require('signonce');
+const { signonce } = require('nksku');
 
 // generate a nonce
 var nonce = signonce.generate64BitNonce();
