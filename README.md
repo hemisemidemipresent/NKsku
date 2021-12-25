@@ -6,12 +6,28 @@ This repo contains 3 parts
 2. NK's `Profile.save`
 3. NK's `sig`s and `nonce`s
 
+# Installation
+
+for a npm project simply use
+
+```
+npm i nksku
+```
+
+or in a browser link to [`bundle.js`](https://raw.githubusercontent.com/hemisemidemipresent/NKsku/main/bundle.js):
+
+(made with browserify)
+
+```
+<script src="https://raw.githubusercontent.com/hemisemidemipresent/NKsku/main/bundle.js"></script>
+```
+
 ### Documentation - Table of Contents
 
 - [NKsku](#nksku)
+- [Installation](#installation)
     - [Documentation - Table of Contents](#documentation---table-of-contents)
 - [Credit where credit is due](#credit-where-credit-is-due)
-- [Installation](#installation)
 - [DGDATA - Data Scheme](#dgdata---data-scheme)
   - [How to use](#how-to-use)
   - [Ripped off documentation for DGDATA](#ripped-off-documentation-for-dgdata)
@@ -39,12 +55,6 @@ DGDATA code was from [this npm package](https://www.npmjs.com/package/dgdata) be
 Profile.save decryption was heavily referenced from [averysumener's c++ Profile.save thingy](https://github.com/averysumner/monke/) and [BowDown097](https://github.com/BowDown097)'s provided c# code. This would not have been possible without them.
 
 `sig` and `nonce` formulas would not be available would not have been possible without [Woob](https://github.com/Vadmeme/) and `Coral#0762`
-
-# Installation
-
-```
-npm i nksku
-```
 
 # DGDATA - Data Scheme
 
