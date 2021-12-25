@@ -1,4 +1,3 @@
-const aesjs = require('aes-js');
 const crypto = require('crypto');
 const zlib = require('zlib');
 
@@ -76,7 +75,6 @@ module.exports = {
         let iv = derivedBytes.slice(0, 16);
         let key = derivedBytes.slice(16, 32);
 
-        let json = await readFile('p.txt', { encoding: null });
         let compressed = await compress(json, { level: 3 });
 
         let cipher = crypto.createCipheriv(algorithm, key, iv);
