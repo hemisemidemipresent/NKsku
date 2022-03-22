@@ -1,6 +1,6 @@
 {
   "name": "nksku",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "description": "DGDATA, Profile.save, sig/nonce",
   "main": "bundle.js",
   "scripts": {
