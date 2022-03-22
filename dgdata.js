@@ -87,13 +87,12 @@ module.exports = {
      * @returns {array} An array of bytes
      */
     hash: function (data) {
-        var loc6 = 0;
         var loc2 = 0;
         var loc3 = 0;
         var loc7 = new Uint32Array(1);
 
         for (var i = 0; i < data.length; i++) {
-            loc2 = data.charCodeAt(loc6);
+            loc2 = data.charCodeAt(i);
             loc3 = (loc7[0] ^ loc2) & 255;
             loc7[0] = ((loc7[0] >> 8) & 16777215) ^ module.exports.secondHash(loc3);
         }
