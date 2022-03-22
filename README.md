@@ -14,14 +14,6 @@ for a npm project simply use
 npm i nksku
 ```
 
-or in a browser link to [`bundle.js`](https://raw.githubusercontent.com/hemisemidemipresent/NKsku/main/bundle.js):
-
-(made with browserify)
-
-```
-<script src="https://raw.githubusercontent.com/hemisemidemipresent/NKsku/main/bundle.js"></script>
-```
-
 ### Documentation - Table of Contents
 
 - [NKsku](#nksku)
@@ -214,6 +206,8 @@ Encrypts a given Buffer the same way as NK encrypts its `Profile.save`
 Returns **[Buffer](https://nodejs.org/api/buffer.html)** buffer to write data to a `.save` file
 
 # signatures and nonces
+
+For manual generation of `sig` see https://signonce.netlify.app/
 
 ## Usage
 
