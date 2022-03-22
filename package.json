@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/hemisemidemipresent/NKsku#readme",
   "dependencies": {
-    "request": "^2.88.2",
+    "node-fetch": "^2.6.7",
     "text-encoding": "^0.7.0"
   }
 }

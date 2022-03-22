@@ -1,8 +1,8 @@
 const { hex_md5 } = require('./md5');
-const skuSignature = 'A26308E242742374';
 const length = 1024 * 1024;
 
 module.exports = {
+    btd6SkuSig: 'A26308E242742374',
     /**
      * glorified Math.random()
      * @returns {int} a 64 bit nonce
@@ -16,7 +16,7 @@ module.exports = {
      * @param {int} nonce
      * @param {string} sessionID (optional)
      */
-    sign(json, nonce, sessionID = null) {
+    sign(json, nonce, sessionID = null, skuSignature = this.btd6SkuSig) {
         // this is to check whether the user has just dumped an entire object in without thinking
         if (typeof json == 'object')
             if (json.data && json.auth && json.sig && json.nonce) {
