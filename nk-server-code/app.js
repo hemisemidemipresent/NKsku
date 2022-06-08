@@ -2,28 +2,21 @@ if ($.api === undefined) {
     $.api = {};
 }
 $.api.app = {
-
-    currentUser: "",
+    currentUser: '',
 
     restoreSession: function (toRestore) {
-
-        if (toRestore == "session" || toRestore == "all") {
-            this.sessionID = this.getCookie("sessionID");
+        if (toRestore == 'session' || toRestore == 'all') {
+            this.sessionID = this.getCookie('sessionID');
         }
 
-        this.setAppInfo([
-            this.getCookie("appID"),
-            this.getCookie("skuID"),
-            this.getCookie("skuSignature"),
-        ])
+        this.setAppInfo([this.getCookie('appID'), this.getCookie('skuID'), this.getCookie('skuSignature')]);
     },
 
     logout: function (dontRefresh) {
-
-        this.setCookie("sessionID", "");
-        this.setCookie("appID", "");
-        this.setCookie("skuID", "");
-        this.setCookie("skuSignature", "");
+        this.setCookie('sessionID', '');
+        this.setCookie('appID', '');
+        this.setCookie('skuID', '');
+        this.setCookie('skuSignature', '');
         $.api.app.sessionID = null;
         $.api.app.skuID = null;
         $.api.app.appID = null;
@@ -31,7 +24,6 @@ $.api.app = {
         if (dontRefresh !== true) {
             location.reload();
         }
-
     },
 
     userDetailsBackup: function (nkapiID, displayName, shortcode) {
@@ -42,18 +34,19 @@ $.api.app = {
     },
 
     request: function (endpoint, body, callback, errorCallback, blockInput, method) {
-
         var bodyString = JSON.stringify(body);
 
         setTimeout(function () {
-
-            var md5 = "";
+            var md5 = '';
             var nonce = new Date().getTime().toString(36) + Math.random();
-            var x = undefined;
 
             if (bodyString.length > 1024 * 1024) {
                 var length = 1024 * 1024;
-                md5 = "W/" + length + "/" + hex_md5($.api.app.sessionID + $.api.app.skuSignature + bodyString.substr(0, length) + nonce);
+                md5 =
+                    'W/' +
+                    length +
+                    '/' +
+                    hex_md5($.api.app.sessionID + $.api.app.skuSignature + bodyString.substr(0, length) + nonce);
             } else if ($.api.app.sessionID != null) {
                 md5 = hex_md5($.api.app.sessionID + $.api.app.skuSignature + bodyString + nonce);
             } else {
@@ -75,8 +68,8 @@ $.api.app = {
                 // UI Loader Start
                 $('#boom').fadeIn();
                 try {
-                    addNotification("Task Started", "info", 10000);
-                } catch (e) { }
+                    addNotification('Task Started', 'info', 10000);
+                } catch (e) {}
                 //$('#loader_hide').hide();
                 // setTimeout(function () {
                 //     $('#loader_hide').fadeIn();
@@ -86,27 +79,30 @@ $.api.app = {
             $.ajax({
                 url: $.api.app.getApiHost() + endpoint,
                 headers: {
-                    "nk_locale": $.api.app.getCurrentLocale()
+                    nk_locale: $.api.app.getCurrentLocale()
                 },
-                method: method === undefined ? "POST" : method,
+                method: method === undefined ? 'POST' : method,
                 data: JSON.stringify(postBody),
-                contentType: "application/json; charset=utf-8",
-                dataType: "text",
-                timeout: 180 * 1000,
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'text',
+                timeout: 180 * 1000
             })
                 .done(function (data) {
-
                     var dataJSON = null;
                     try {
                         dataJSON = JSON.parse(data);
-                    } catch (e) {
-
-                    }
+                    } catch (e) {}
 
                     if (dataJSON === null) {
-                        window.onerror("Call to " + $.api.app.getApiHost() + endpoint + " returned " + data, "sdk17.js", 0, 0, "");
+                        window.onerror(
+                            'Call to ' + $.api.app.getApiHost() + endpoint + ' returned ' + data,
+                            'sdk17.js',
+                            0,
+                            0,
+                            ''
+                        );
                         var errorObject = {
-                            type: "NETWORK ERROR",
+                            type: 'NETWORK ERROR',
                             error: data
                         };
                         if (errorCallback) {
@@ -120,7 +116,7 @@ $.api.app = {
                     var dataStr = JSON.stringify(dataJSON);
                     var rawData = JSON.parse(dataStr);
 
-                    if (typeof dataJSON.data == "string") {
+                    if (typeof dataJSON.data == 'string') {
                         dataJSON.data = JSON.parse(dataJSON.data);
                     }
 
@@ -129,19 +125,19 @@ $.api.app = {
                         return;
                     }
                     callback(dataJSON.error, dataJSON.data, rawData);
-                }).error(function (error) {
-
-                    if (window.location.pathname.indexOf("admin") !== -1 && document.cookie.indexOf("sessionID") === -1) {
+                })
+                .error(function (error) {
+                    if (window.location.pathname.indexOf('admin') !== -1 && document.cookie.indexOf('sessionID') === -1) {
                         if ($.api.app.blockLoginPrompt === true) {
                             return;
                         }
                         $.api.app.blockLoginPrompt = true;
-                        window.open("/moab/oauth/start", "", "width=600,height=480");
+                        window.open('/moab/oauth/start', '', 'width=600,height=480');
                         return;
                     }
 
                     var errorObject = {
-                        type: "NETWORK ERROR",
+                        type: 'NETWORK ERROR',
                         error: error.responseText,
                         endpoint: endpoint,
                         rawError: error
@@ -152,10 +148,9 @@ $.api.app = {
                     } else {
                         $.api.app.error(errorObject);
                     }
-                }).complete(function () {
-
+                })
+                .complete(function () {
                     if (blockInput === undefined || blockInput == true) {
-
                         // UI Loader Start
                         $('#boom').fadeOut();
                         // Close all existing notifications
@@ -164,17 +159,14 @@ $.api.app = {
                         });
                         // Show task success notification
                         try {
-                            addNotification("Task Completed", "success");
-                        } catch (e) { }
-                    };
+                            addNotification('Task Completed', 'success');
+                        } catch (e) {}
+                    }
                 });
-
-        }, 1)
-
+        }, 1);
     },
 
     error: function (errorDetails) {
-
         /*$('<div>').simpledialog2({
             mode: 'blank',
             headerText: "Error",
@@ -192,53 +184,47 @@ $.api.app = {
 
         if (linkErrorPayload === null) {
             try {
-                $('#error_type').val(errorDetails.type + " / " + errorDetails.rawError.statusText);
-            } catch (e) { }
-            $('#error_fix').val("The endpoint took too long to respond or the server could not be reached. Full error details are below")
-        }
-        else {
-            if (linkErrorPayload.type == "ERR_ACCESS_DENIED") {
-                $('#popup_access_permission').html(errorDetails.missing)
-                $('#popup_access').popup("open");
+                $('#error_type').val(errorDetails.type + ' / ' + errorDetails.rawError.statusText);
+            } catch (e) {}
+            $('#error_fix').val(
+                'The endpoint took too long to respond or the server could not be reached. Full error details are below'
+            );
+        } else {
+            if (linkErrorPayload.type == 'ERR_ACCESS_DENIED') {
+                $('#popup_access_permission').html(errorDetails.missing);
+                $('#popup_access').popup('open');
                 return;
-            }
-            else {
-                $('#error_type').val("Server Error / " + linkErrorPayload.type);
+            } else {
+                $('#error_type').val('Server Error / ' + linkErrorPayload.type);
                 if (linkErrorPayload.details) {
-                    $('#error_fix').val(linkErrorPayload.details.reason + "." + linkErrorPayload.details.fix);
-                }
-                else {
-                    $('#error_fix').val("This error has been reported to the infra team")
+                    $('#error_fix').val(linkErrorPayload.details.reason + '.' + linkErrorPayload.details.fix);
+                } else {
+                    $('#error_fix').val('This error has been reported to the infra team');
                 }
             }
         }
-
-
-
 
         try {
-            $('#popup_error').popup("open");
-        } catch (e) { }
-
+            $('#popup_error').popup('open');
+        } catch (e) {}
     },
 
     setSession: function (sessionID) {
-        this.setCookie("sessionID", sessionID, 60);
+        this.setCookie('sessionID', sessionID, 60);
         this.sessionID = sessionID;
     },
 
     setAppInfo: function (appInfo) {
-
         this.appID = parseInt(appInfo[0]);
         this.skuID = parseInt(appInfo[1]);
         this.skuSignature = appInfo[2];
 
-        this.setCookie("appID", this.appID, 90);
-        this.setCookie("skuID", this.skuID, 90);
-        this.setCookie("skuSignature", this.skuSignature, 90);
+        this.setCookie('appID', this.appID, 90);
+        this.setCookie('skuID', this.skuID, 90);
+        this.setCookie('skuSignature', this.skuSignature, 90);
 
         try {
-            window.dispatchEvent(new Event("appInfoAvailable"));
+            window.dispatchEvent(new Event('appInfoAvailable'));
         } catch (e) {
             //Fallback for really old Android devices running 4.2.x
             getCountry();
@@ -246,18 +232,15 @@ $.api.app = {
 
         if (this.appID === 0) {
             $('#boom').show();
-            $('#appIDError').modal("show");
+            $('#appIDError').modal('show');
         }
-
     },
 
     setCurrentProviders: function (loggedInProviders) {
         this.loggedInProviders = loggedInProviders;
         try {
-            window.dispatchEvent(new Event("loggedInProvidersAvailable"));
-        } catch (e) {
-        }
-
+            window.dispatchEvent(new Event('loggedInProvidersAvailable'));
+        } catch (e) {}
     },
 
     setCookie: function (c_name, value, exdays) {
@@ -270,29 +253,34 @@ $.api.app = {
         // var c_value = escape(value) + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
 
         try {
-            Cookies.set(c_name, value, { SameSite: "None", expires: exdate, path: '/admin', secure: (window.location.toString().indexOf("ninjakiwi.com") != -1 ? true : false) })
-
+            Cookies.set(c_name, value, {
+                SameSite: 'None',
+                expires: exdate,
+                path: '/admin',
+                secure: window.location.toString().indexOf('ninjakiwi.com') != -1 ? true : false
+            });
+        } catch (e) {
+            document.cookie =
+                c_name + '=' + value + ';' + (window.location.toString().indexOf('ninjakiwi.com') != -1 ? 'secure' : '');
         }
-        catch (e) {
-            document.cookie = c_name + "=" + value + ";" + (window.location.toString().indexOf("ninjakiwi.com") != -1 ? "secure" : "");
-
-        }
-        // 
+        //
         // Using js-cookie library https://github.com/js-cookie/js-cookie
     },
 
     getCookie: function (c_name) {
-
         try {
             // Using js-cookie library https://github.com/js-cookie/js-cookie
             return Cookies.get(c_name);
         } catch (e) {
             //lets fall back to the old code
-            var i, x, y, ARRcookies = document.cookie.split(";");
+            var i,
+                x,
+                y,
+                ARRcookies = document.cookie.split(';');
             for (i = 0; i < ARRcookies.length; i++) {
-                x = ARRcookies[i].substr(0, ARRcookies[i].indexOf("="));
-                y = ARRcookies[i].substr(ARRcookies[i].indexOf("=") + 1);
-                x = x.replace(/^\s+|\s+$/g, "");
+                x = ARRcookies[i].substr(0, ARRcookies[i].indexOf('='));
+                y = ARRcookies[i].substr(ARRcookies[i].indexOf('=') + 1);
+                x = x.replace(/^\s+|\s+$/g, '');
                 if (x == c_name) {
                     return unescape(y);
                 }
@@ -305,73 +293,73 @@ $.api.app = {
             json = JSON.stringify(json, undefined, 2);
         }
         json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
-            var cls = 'number';
-            if (/^"/.test(match)) {
-                if (/:$/.test(match)) {
-                    cls = 'key';
-                } else {
-                    cls = 'string';
+        return json.replace(
+            /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
+            function (match) {
+                var cls = 'number';
+                if (/^"/.test(match)) {
+                    if (/:$/.test(match)) {
+                        cls = 'key';
+                    } else {
+                        cls = 'string';
+                    }
+                } else if (/true|false/.test(match)) {
+                    cls = 'boolean';
+                } else if (/null/.test(match)) {
+                    cls = 'null';
                 }
-            } else if (/true|false/.test(match)) {
-                cls = 'boolean';
-            } else if (/null/.test(match)) {
-                cls = 'null';
+                return '<span class="' + cls + '">' + match + '</span>';
             }
-            return '<span class="' + cls + '">' + match + '</span>';
-        });
+        );
     },
 
     getApiHost: function () {
-
-        if (window.location.toString().indexOf("api-staging.ninjakiwi.com") != -1) {
-            return "//api-staging.ninjakiwi.com";
-        } else if (window.location.toString().indexOf("api.ninjakiwi.com") != -1) {
-            return "//api.ninjakiwi.com";
+        if (window.location.toString().indexOf('api-staging.ninjakiwi.com') != -1) {
+            return '//api-staging.ninjakiwi.com';
+        } else if (window.location.toString().indexOf('api.ninjakiwi.com') != -1) {
+            return '//api.ninjakiwi.com';
         } else {
-            return "";
+            return '';
         }
     },
 
     getStaticHost: function (deployment) {
-
-        var host = "https:"
-        if (deployment === "staging" || window.location.toString().indexOf("api-staging.ninjakiwi.com") != -1) {
-            host += "//static-api-staging.nkstatic.com";
-        } else if (deployment === "production" || window.location.toString().indexOf("api.ninjakiwi.com") != -1) {
-            host += "//static-api.nkstatic.com";
+        var host = 'https:';
+        if (deployment === 'staging' || window.location.toString().indexOf('api-staging.ninjakiwi.com') != -1) {
+            host += '//static-api-staging.nkstatic.com';
+        } else if (deployment === 'production' || window.location.toString().indexOf('api.ninjakiwi.com') != -1) {
+            host += '//static-api.nkstatic.com';
         } else {
             host += '//s3.amazonaws.com/nkapi-user-documents-dev';
         }
 
-        if (host.indexOf("https") != -1) {
-            host = host.replace("static.api", "static-api");
+        if (host.indexOf('https') != -1) {
+            host = host.replace('static.api', 'static-api');
         }
         return host;
     },
 
     getPriorityStaticHost: function () {
-
         var host = location.protocol;
-        if (window.location.toString().indexOf("api-staging.ninjakiwi.com") != -1) {
-            host += "//priority-static-api-staging.nkstatic.com/storage/static";
-        } else if (window.location.toString().indexOf("api.ninjakiwi.com") != -1) {
-            host += "//priority-static-api.nkstatic.com/storage/static";
+        if (window.location.toString().indexOf('api-staging.ninjakiwi.com') != -1) {
+            host += '//priority-static-api-staging.nkstatic.com/storage/static';
+        } else if (window.location.toString().indexOf('api.ninjakiwi.com') != -1) {
+            host += '//priority-static-api.nkstatic.com/storage/static';
         } else {
             host += '//s3.amazonaws.com/nkapi-user-documents-dev';
         }
 
-        if (host.indexOf("https") != -1) {
-            host = host.replace("static.api", "static-api");
+        if (host.indexOf('https') != -1) {
+            host = host.replace('static.api', 'static-api');
         }
         return host;
     },
     getCFStaticHost: function () {
-        var host = "https:";
-        if (window.location.toString().indexOf("api-staging.ninjakiwi.com") != -1) {
-            host += "//static-api-staging.nkstatic.com";
-        } else if (window.location.toString().indexOf("api.ninjakiwi.com") != -1) {
-            host += "//static-api.nkstatic.com";
+        var host = 'https:';
+        if (window.location.toString().indexOf('api-staging.ninjakiwi.com') != -1) {
+            host += '//static-api-staging.nkstatic.com';
+        } else if (window.location.toString().indexOf('api.ninjakiwi.com') != -1) {
+            host += '//static-api.nkstatic.com';
         } else {
             host += '//s3.amazonaws.com/nkapi-user-documents-dev';
         }
@@ -379,22 +367,26 @@ $.api.app = {
         return host;
     },
     getBucket: function (deployment) {
-
-        if (deployment === "staging" || (deployment === undefined && window.location.toString().indexOf("api-staging.ninjakiwi.com") != -1)) {
-            return "nkapi-user-documents-staging";
-        } else if (deployment === "production" || (deployment === undefined && window.location.toString().indexOf("api.ninjakiwi.com") != -1)) {
-            return "nkapi-user-documents-production";
+        if (
+            deployment === 'staging' ||
+            (deployment === undefined && window.location.toString().indexOf('api-staging.ninjakiwi.com') != -1)
+        ) {
+            return 'nkapi-user-documents-staging';
+        } else if (
+            deployment === 'production' ||
+            (deployment === undefined && window.location.toString().indexOf('api.ninjakiwi.com') != -1)
+        ) {
+            return 'nkapi-user-documents-production';
         } else {
             return 'nkapi-user-documents-dev';
         }
     },
 
     getBucketForDeployment: function (deployment) {
-
-        if (deployment === "staging") {
-            return "nkapi-user-documents-staging";
-        } else if (deployment === "production") {
-            return "nkapi-user-documents-production";
+        if (deployment === 'staging') {
+            return 'nkapi-user-documents-staging';
+        } else if (deployment === 'production') {
+            return 'nkapi-user-documents-production';
         } else {
             return 'nkapi-user-documents-dev';
         }
@@ -446,7 +438,7 @@ $.api.app = {
             previousUsers.pop();
         }
 
-        localStorage.setItem("previousUsers", JSON.stringify(previousUsers));
+        localStorage.setItem('previousUsers', JSON.stringify(previousUsers));
     },
 
     getCurrentUser: function () {
@@ -454,20 +446,18 @@ $.api.app = {
     },
 
     getCurrentLocale: function () {
-
-        var locale = this.getQueryVariable("locale");
+        var locale = this.getQueryVariable('locale');
         if (locale) {
-            this.setCookie("locale", this.getQueryVariable("locale"));
+            this.setCookie('locale', this.getQueryVariable('locale'));
         } else {
-            locale = this.getCookie("locale");
+            locale = this.getCookie('locale');
         }
-        return locale ? locale : "en";
+        return locale ? locale : 'en';
     },
 
     hideLoader: function () {
         $('#boom').fadeOut();
     },
-
 
     addClicker: function (search, handler) {
         if ($(search).length > 1) {
@@ -485,15 +475,15 @@ $.api.app = {
         });
     },
     getTimeFormat: function () {
-        return "MMM DD, YYYY HH:mm:ss";
+        return 'MMM DD, YYYY HH:mm:ss';
     },
     getAppName: function (appID) {
-        var appName = "";
+        var appName = '';
         $.each(ddData, function (index, appData) {
-            var currentAppID = appData.value.split(":")[0];
+            var currentAppID = appData.value.split(':')[0];
 
             if (appID == currentAppID) {
-                appName = appData.description.split("-")[0].trim();
+                appName = appData.description.split('-')[0].trim();
             }
         });
         return appName;
@@ -501,22 +491,20 @@ $.api.app = {
 };
 
 $.api.userUtils = {
-
     isPlatformProviderLinked: function (user) {
         var found = false;
         user.providersAvailable.forEach(function (provider) {
             switch (provider) {
-                case "gc":
-                case "gp":
-                case "gcir":
+                case 'gc':
+                case 'gp':
+                case 'gcir':
                     found = true;
             }
-        })
+        });
         return found;
     },
 
     isProviderAlreadyLinked: function (user, findProvider) {
-
         if ($.api.user.login.currentUser == null) {
             return;
         }
@@ -526,28 +514,32 @@ $.api.userUtils = {
             if (findProvider == provider) {
                 found = true;
             }
-        })
+        });
         return found;
     }
-}
+};
 
 $.api.navigation = {
-
     currentModule: null,
     moduleName: null,
-    moduleFolder: "shared",
+    moduleFolder: 'shared',
     previousElement: null,
     timeoutRefs: [],
     popupRefs: {},
     update: function (data, isFromPop, querystring) {
-
         for (var key in $.api.navigation.popupRefs) {
             if ($.api.navigation.popupRefs[key].closed) {
                 delete $.api.navigation.popupRefs[key];
             }
         }
         if (Object.keys($.api.navigation.popupRefs).length != 0) {
-            if (!confirm("You have " + Object.keys($.api.navigation.popupRefs).length + " popup windows open, do you want to navigate away and close these windows?")) {
+            if (
+                !confirm(
+                    'You have ' +
+                        Object.keys($.api.navigation.popupRefs).length +
+                        ' popup windows open, do you want to navigate away and close these windows?'
+                )
+            ) {
                 return;
             }
 
@@ -560,106 +552,102 @@ $.api.navigation = {
 
         var moduleName;
 
-        if (typeof data == "string") {
+        if (typeof data == 'string') {
             moduleName = data;
         } else {
-            moduleName = $(this).data("value");
+            moduleName = $(this).data('value');
         }
 
         $.api.navigation.moduleName = moduleName;
 
         $('#navigation_choice').val(moduleName);
-        if (!$(this).hasClass("hotbar_page")) {
-            $(this).addClass("selected");
+        if (!$(this).hasClass('hotbar_page')) {
+            $(this).addClass('selected');
         }
-        if (moduleName == "") {
+        if (moduleName == '') {
             return;
         }
 
         // Send page anylitics - track how many times a page has been visted
-        var environment = window.location.toString().includes("api.ninjakiwi.com") ? "production" : "staging";
+        var environment = window.location.toString().includes('api.ninjakiwi.com') ? 'production' : 'staging';
         var xhttp = new XMLHttpRequest();
-        xhttp.open("POST", "https://analytics.ninjakiwi.com/link/mobile/librato", true);
-        xhttp.setRequestHeader("Content-type", "application/json");
-        xhttp.send(JSON.stringify({
-            metricname: "admin:" + environment + ":" + moduleName,
-            count: 1
-        }));
+        xhttp.open('POST', 'https://analytics.ninjakiwi.com/link/mobile/librato', true);
+        xhttp.setRequestHeader('Content-type', 'application/json');
+        xhttp.send(
+            JSON.stringify({
+                metricname: 'admin:' + environment + ':' + moduleName,
+                count: 1
+            })
+        );
 
         if ($.api.navigation.previousElement) {
-            $($.api.navigation.previousElement).removeClass("selected");
+            $($.api.navigation.previousElement).removeClass('selected');
         }
         $.api.navigation.previousElement = this;
 
         $.api.navigation.reload();
         if (isFromPop !== true) {
             if (querystring !== undefined) {
-                history.pushState(null, null, "/admin/?${querystring}#${moduleName}");
+                history.pushState(null, null, '/admin/?${querystring}#${moduleName}');
+            } else {
+                history.pushState(null, null, '/admin/#' + moduleName);
             }
-            else {
-                history.pushState(null, null, "/admin/#" + moduleName);
-            }
-
         }
         window.scrollTo(0, 0);
         try {
             document.getElementById('feature-container').scrollTo(0, 0);
-        } catch (e) { }
+        } catch (e) {}
     },
 
     reload: function () {
-
         $.api.navigation.flushTimeouts();
         var currentModule = $('#navigation_choice').val();
         $.ajax({
-            url: "/" + $.api.navigation.moduleFolder + "/modules/" + currentModule + ".html",
-            method: "GET"
-        })
-            .done(function (data) {
+            url: '/' + $.api.navigation.moduleFolder + '/modules/' + currentModule + '.html',
+            method: 'GET'
+        }).done(function (data) {
+            $('#feature-container').html('----');
+            $('#feature-container').html(data);
+            var parts = currentModule.split('-');
+            var module = $.api;
+            while (parts.length != 0) {
+                module = module[parts.shift()];
+            }
+            module.start();
+            $.api.navigation.currentModule = module;
+            $('#admin').trigger('create');
 
-                $('#feature-container').html("----");
-                $('#feature-container').html(data);
-                var parts = currentModule.split("-");
-                var module = $.api;
-                while (parts.length != 0) {
-                    module = module[parts.shift()];
+            //Show a warning if the input isn't a nkapiID
+            $('[data-currentUser]').on('input', function (event) {
+                var target = event.currentTarget;
+                var value = target.value;
+                if (value.length !== 24 && value.toLowerCase().startsWith('no_') === false) {
+                    target.style.background = 'rgba(255,0,255,0.1)';
+                    target.title = 'This input expects an nkapiID or no_link id';
+                } else {
+                    target.style.background = 'inherit';
+                    target.title = null;
                 }
-                module.start();
-                $.api.navigation.currentModule = module;
-                $('#admin').trigger("create")
-
-                //Show a warning if the input isn't a nkapiID
-                $('[data-currentUser]').on('input', function (event) {
-                    var target = event.currentTarget;
-                    var value = target.value;
-                    if (value.length !== 24 && value.toLowerCase().startsWith("no_") === false) {
-                        target.style.background = 'rgba(255,0,255,0.1)';
-                        target.title = "This input expects an nkapiID or no_link id";
-                    }
-                    else {
-                        target.style.background = 'inherit'
-                        target.title = null;
-                    }
-                })
-            })
+            });
+        });
     },
-
 
     flushTimeouts: function () {
         if ($.api.navigation.timeoutRefs) {
             $.api.navigation.timeoutRefs.forEach(function (timeoutRef) {
-                clearInterval(timeoutRef)
+                clearInterval(timeoutRef);
             });
         }
         $.api.navigation.timeoutRefs = [];
     },
 
     addTimeoutRef: function (timeoutRef) {
-        $.api.navigation.timeoutRefs ? $.api.navigation.timeoutRefs.push(timeoutRef) : $.api.navigation.timeoutRefs = [timeoutRef];
+        $.api.navigation.timeoutRefs
+            ? $.api.navigation.timeoutRefs.push(timeoutRef)
+            : ($.api.navigation.timeoutRefs = [timeoutRef]);
     },
 
     addPopupRef: function (popup, key) {
-
         var stillOpen = true;
         try {
             stillOpen = !$.api.navigation.popupRefs[key].closed;
@@ -668,7 +656,7 @@ $.api.navigation = {
         }
 
         if (stillOpen === true && $.api.navigation.popupRefs[key]) {
-            if (confirm("You already have a popup for this feature open. Do you want to close the old popup?")) {
+            if (confirm('You already have a popup for this feature open. Do you want to close the old popup?')) {
                 $.api.navigation.popupRefs[key].close();
                 $.api.navigation.popupRefs[key] = null;
             }
@@ -676,9 +664,8 @@ $.api.navigation = {
 
         $.api.navigation.popupRefs[key] = popup;
         popup.onclose = function () {
-            console.log("closed " + key);
-        }
-
+            console.log('closed ' + key);
+        };
     },
 
     flushPopupRefs: function () {
@@ -689,29 +676,27 @@ $.api.navigation = {
     },
 
     flushPopupRef: function (name) {
-        delete $.api.navigation.popupRefs[name]
+        delete $.api.navigation.popupRefs[name];
     },
 
     sendToSDK: function (url, data) {
-
-
-        if (url === "//close") {
+        if (url === '//close') {
             //lets clean up and timers and intervals
-            var tID = setTimeout(function () { }, 1000);
+            var tID = setTimeout(function () {}, 1000);
             while (tID !== -1) {
                 clearTimeout(tID);
                 tID--;
             }
 
-            var iID = setInterval(function () { }, 1000);
+            var iID = setInterval(function () {}, 1000);
             while (iID !== -1) {
                 clearInterval(iID);
                 iID--;
             }
         }
         // check for query parameters passed when loading this SDK
-        var testMode = $.api.app.getQueryVariable("browser") == "true";
-        var unityMode = $.api.app.getQueryVariable("unity") == "true";
+        var testMode = $.api.app.getQueryVariable('browser') == 'true';
+        var unityMode = $.api.app.getQueryVariable('unity') == 'true';
 
         // add the data to the url string, if any was passed
         if (data != null) {
@@ -719,34 +704,39 @@ $.api.navigation = {
             var dataAsString = JSON.stringify(data);
             var dataAsBase64 = btoa(dataAsString);
             // add it as a query parameter
-            if (url.indexOf("?") == -1) {
-                url += "?data=" + dataAsBase64
+            if (url.indexOf('?') == -1) {
+                url += '?data=' + dataAsBase64;
             } else {
-                url += "&data=" + dataAsBase64
+                url += '&data=' + dataAsBase64;
             }
         }
 
         // add the protocol to the start of the url
         if (unityMode) {
-            url = "uniwebview:" + url;
+            url = 'uniwebview:' + url;
         } else {
-            url = "http:" + url;
+            url = 'http:' + url;
         }
 
-        if ($.api.app.getQueryVariable("platform") == "winrt") {
-            var full = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + "/";
-            url = url.replace("http://", full)
+        if ($.api.app.getQueryVariable('platform') == 'winrt') {
+            var full = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/';
+            url = url.replace('http://', full);
         }
 
         var xhttp = new XMLHttpRequest();
-        xhttp.open("POST", "https://analytics.ninjakiwi.com/link/mobile/sdk", true);
-        xhttp.setRequestHeader("Content-type", "application/json");
-        xhttp.send(JSON.stringify({
-            currentPage: currentPage,
-            info: url.substring(0, 256),
-            user: $.api.app.currentUser + " / " + ($.api.profile && $.api.profile.currentUser ? $.api.profile.currentUser.nkapiID : ""),
-            agent: navigator.userAgent
-        }));
+        xhttp.open('POST', 'https://analytics.ninjakiwi.com/link/mobile/sdk', true);
+        xhttp.setRequestHeader('Content-type', 'application/json');
+        xhttp.send(
+            JSON.stringify({
+                currentPage: currentPage,
+                info: url.substring(0, 256),
+                user:
+                    $.api.app.currentUser +
+                    ' / ' +
+                    ($.api.profile && $.api.profile.currentUser ? $.api.profile.currentUser.nkapiID : ''),
+                agent: navigator.userAgent
+            })
+        );
 
         if (testMode) {
             // when testing in a browser, just log the results
@@ -758,13 +748,11 @@ $.api.navigation = {
     },
 
     navigateWindow: function (url) {
-
-        if ($.api.app.getQueryVariable("platform") == "winrt") {
+        if ($.api.app.getQueryVariable('platform') == 'winrt') {
             window.location.href = url;
         } else {
             window.location = url;
         }
-
     },
 
     allowPageNavigation: function () {
@@ -779,42 +767,47 @@ $.api.navigation = {
         if ($.api.navigation.currentModule && $.api.navigation.currentModule.promptOnLeave) {
             return $.api.navigation.currentModule.promptOnLeave();
         }
-    },
+    }
 };
 
 $(window).bind('beforeunload', $.api.navigation.beforeUnload);
 
 window.onpopstate = function (e) {
-    if (window.location.hash !== "") {
+    if (window.location.hash !== '') {
         $.api.navigation.update(window.location.hash.substr(1), true);
     }
-}
+};
 
 window.onerror = function (message, source, lineno, colno, error) {
     var xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "https://analytics.ninjakiwi.com/link/mobile/sdkerror", true);
-    xhttp.setRequestHeader("Content-type", "application/json");
-    xhttp.send(JSON.stringify({
-        message: message,
-        source: source,
-        lineno: lineno,
-        colno: colno
-    }));
-}
+    xhttp.open('POST', 'https://analytics.ninjakiwi.com/link/mobile/sdkerror', true);
+    xhttp.setRequestHeader('Content-type', 'application/json');
+    xhttp.send(
+        JSON.stringify({
+            message: message,
+            source: source,
+            lineno: lineno,
+            colno: colno
+        })
+    );
+};
 
 function numberWithCommas(x) {
     if (x === null || x === undefined) {
         return x;
     }
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
 function validURL(str) {
-    var pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
-        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
-        '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
-        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
-        '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
-        '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
+    var pattern = new RegExp(
+        '^(https?:\\/\\/)?' + // protocol
+            '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+            '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+            '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+            '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+            '(\\#[-a-z\\d_]*)?$',
+        'i'
+    ); // fragment locator
     return !!pattern.test(str);
 }

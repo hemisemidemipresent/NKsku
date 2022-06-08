@@ -69,7 +69,7 @@ request(url, { encoding: null }, (err, res, body) => {
 
 ## Ripped off documentation for DGDATA
 
-( Formerly known as NKTools)
+(Formerly known as NKTools)
 
 ### arrayToStr
 
@@ -215,28 +215,28 @@ For manual generation of `sig` see https://signonce.netlify.app/
 const { signonce } = require('nksku');
 
 // generate a nonce
-var nonce = signonce.generate64BitNonce();
+let nonce = signonce.generate64BitNonce();
 
 // signature finder
 
 // example 1: let it generate from a string
-var obj = '{}';
-var sig = signonce.sign(obj, nonce);
+let obj = '{}';
+let sig = signonce.sign(obj, nonce);
 
 // example 1.5: let it generate w/o a nonce, used for validating responses
-var obj = '{}';
-var sig = signonce.sign(obj);
+let obj = '{}';
+let sig = signonce.sign(obj);
 
 // example 2: sign from an obj
-var obj = {};
-var sig = signonce.sign(obj, nonce);
+let obj = {};
+let sig = signonce.sign(obj, nonce);
 
 // example 2.5: let it generate w/o a nonce, used for validating responses
-var obj = {};
-var sig = signonce.sign(obj);
+let obj = {};
+let sig = signonce.sign(obj);
 
 // example 3: sign from a whole request (probably for checking)
-var obj = {
+let obj = {
     data: '{}',
     auth: {
         session: null,
@@ -247,10 +247,10 @@ var obj = {
     sig: 'dc1027f28bc1ba12f6ef770588cdd1f4',
     nonce: '6129188331007147111'
 };
-var sig = signonce.sign(obj); // undefined nonce = use object's nonce
+let sig = signonce.sign(obj); // undefined nonce = use object's nonce
 
 // example 4: same as example 3 but for some reason u put in a nonce
-var obj = {
+let obj = {
     data: '{}',
     auth: {
         session: null,
@@ -261,8 +261,8 @@ var obj = {
     sig: 'dc1027f28bc1ba12f6ef770588cdd1f4',
     nonce: '6129188331007147111'
 };
-var nonce = obj.nonce;
-var sig = signonce.sign(obj, nonce); // undefined nonce = use object's nonce
+let nonce = obj.nonce;
+let sig = signonce.sign(obj, nonce); // undefined nonce = use object's nonce
 ```
 
 # Extras
