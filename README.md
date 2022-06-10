@@ -262,7 +262,7 @@ let obj = {
     nonce: '6129188331007147111'
 };
 let nonce = obj.nonce;
-let sig = signonce.sign(obj, nonce); // undefined nonce = use object's nonce
+let sig = signonce.sign(obj, nonce);
 ```
 
 # Extras
