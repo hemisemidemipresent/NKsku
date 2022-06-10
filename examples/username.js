@@ -18,9 +18,15 @@ async function main() {
         keys: ['USYMPOEOX'],
         includeOnlineStatus: false
     };
+    let body3 = {
+        method: 'displayName',
+        keys: ['sjb'],
+        includeOnlineStatus: false
+    };
 
-    console.log(await request(body1));
-    console.log(await request(body2));
+    //console.log(await request(body1));
+    //console.log(await request(body2));
+    console.log(await request(body3));
 }
 async function request(body) {
     let nonce = Math.random() * Math.pow(2, 63) + ''; // or any hentai code, but there are much less hentai than 64-bit integers (for now)
