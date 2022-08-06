@@ -26,10 +26,15 @@ It is thought that ES does not have any good solutions for these two problems, a
 
     If you do not specify a search method when you search, this is the search method used.
 
-    This search method is roughly divided into two steps.
+    1. Send the query to each shard
+    2. Find all matching documents and calculate scores using **local** Term/Document Frequencies
+    3. Build a priority queue of results (sort, pagination with from/to, etc)
+    4. Return metadata about the results to requesting node. Note, the actual document is not sent yet, just the scores
+    5. Scores from all the shards are merged and sorted on the requesting node, docs are selected according to query criteria
+    6. Finally, the actual docs are retrieved from individual shards where they reside.
+    7. Results are returned to the client
 
-    1. Send a request to all shards. Each shard only returns information related to sorting and ranking (note that the data/document/file? is not included). It then sorts and ranks the information related to sorting and ranking and from there takes the amount of data required by the users.
-    2. Get the data/document/file? from the relevant shard. The data returned in this way is the same size as requested by the user.
+    This system usually works fine. In most cases, your index has "enough" documents to smooth out the Term/Document frequency statistics. So while each shard may not have complete knowledge of frequencies across the cluster, results are “good enough” because the frequencies are fairly similar everywhere.
 
 3. **DFS query and fetch**
 

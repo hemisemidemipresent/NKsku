@@ -1,4 +1,4 @@
-let nksku = require('./index');
+let nksku = require('nksku');
 let fetch = require('node-fetch');
 fetch('https://static-api.nkstatic.com/nkapi/skusettings/752e866bde3d94b5a160795bf011688b.json', {
     encoding: null

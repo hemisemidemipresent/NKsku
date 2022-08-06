@@ -1,7 +1,7 @@
 {
   "name": "nksku",
-  "version": "1.0.7",
-  "description": "DGDATA, Profile.save, sig/nonce",
+  "version": "1.0.8",
+  "description": "A multi-purpose library for decrypting Profile.save and other data, as well as making valid requests to NK's server",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -17,7 +17,6 @@
   },
   "homepage": "https://github.com/hemisemidemipresent/NKsku#readme",
   "dependencies": {
-    "node-fetch": "^2.6.7",
     "text-encoding": "^0.7.0"
   }
 }
