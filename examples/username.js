@@ -3,9 +3,9 @@ const nksku = require('nksku');
 const appID = 11;
 const skuID = 35;
 const sessionID = null;
-const UserAgent = 'btd6-windowsplayer-31';
+const UserAgent = 'btd6-windowsplayer-32.2';
 
-const deviceID = 'no_link428482bf0b696dcf8ded17e53910b84f9bc99f53';
+const deviceID = '';
 
 async function main() {
     let body1 = {
@@ -26,7 +26,7 @@ async function main() {
 
     //console.log(await request(body1));
     //console.log(await request(body2));
-    console.log(await request(body3));
+    console.log(await request(body1));
 }
 async function request(body) {
     let nonce = Math.random() * Math.pow(2, 63) + ''; // or any hentai code, but there are much less hentai than 64-bit integers (for now)
@@ -47,7 +47,13 @@ async function request(body) {
                 sig: nksku.signonce.sign(body, nonce),
                 nonce: nonce
             }),
-            headers: { 'User-Agent': UserAgent, 'Content-Type': 'application/json' }
+            headers: {
+                'Accept-Encoding': 'deflate, gzip',
+                'User-Agent': UserAgent,
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'X-Unity-Version': '2020.3.28f1'
+            }
         });
         return await k.json();
     } catch (error) {
